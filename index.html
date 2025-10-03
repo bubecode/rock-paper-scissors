@@ -1,1 +1,49 @@
-<script src="app.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>RPS</h1>
+
+    <div class="score">
+      <div class="player">
+        <p>Human</p>
+        <span id="human-score">0</span>
+      </div>
+      <div class="player">
+        <p>Computer</p>
+        <span id="computer-score">0</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="icons">
+        <button>✊</button>
+        <button>🖐️</button>
+        <button>✌</button>
+      </div>
+
+      <div class="hands">
+        <div class="computer-hand">✊</div>
+        <div class="human-hand">✊</div>
+      </div>
+
+      <div class="rule">
+        <ul>
+          <li>Rock beats Scissors</li>
+          <li>Scissors beat Paper</li>
+          <li>Paper beats Rock</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="message">
+      <p id="game-message">message!</p>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
