@@ -1,73 +1,85 @@
 function titleCase(str) {
     return str.charAt(0).toUpperCase() + str.slice(1)
 }
+const icons = { "rock": "✊", "paper": "🖐️", "scissors": "✌" }
 
 function getComputerChoice() {
-
-    let message = ''
-    const response = Math.floor(Math.random() * 3)
-    if (response === 0) {
-        message = "rock"
-    } else if (response === 1) {
-        message = "paper"
-    } else {
-        message = "scissors"
-    }
-
-    return message
+    const choices = ["rock", "paper", "scissors"];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
 
 }
 
 
-function getHumanChoice() {
 
-    let userChoice = prompt("Choose: rock, paper, or scissors", "rock").toLowerCase();
-    return userChoice
+let humanScore = 0;
+let computerScore = 0;
+const MAX_SCORE = 5;
 
-}
-
-
+const buttons = document.querySelectorAll("button")
+const computerHand = document.querySelector(".computer-hand")
+const humanHand = document.querySelector(".human-hand")
+const gameMessage = document.querySelector("#game-message")
+const humanScoreLabel = document.querySelector("#human-score")
+const computerScoreLabel = document.querySelector("#computer-score")
 
 function playRound(humanChoice, computerChoice) {
 
     if (humanChoice === computerChoice) {
+        return null
     } else if (
-        (humanChoice === 'rock' && computerChoice === "scissors") ||
-        (humanChoice === 'paper' && computerChoice === "rock") ||
-        (humanChoice === "scissors" && computerChoice === "paper")
+        (humanChoice === 'rock' && computerChoice === 'scissors') ||
+        (humanChoice === 'paper' && computerChoice === 'rock') ||
+        (humanChoice === 'scissors' && computerChoice === 'paper')
     ) {
-        return 'win'
+        return true;
     } else {
-        return 'lose'
-    }
-}
-
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
-
-
-function playGame() {
-    let humanScore = 0
-    let computerScore = 0
-
-    for (let i = 0; i < 5; i++) {
-        let result = playRound(getHumanChoice(), getComputerChoice())
-        if (result == 'win') {
-            humanScore++
-        } else if (result == 'lose') {
-            computerScore++
-        }
-    }
-
-    console.log("Final Score → Human:", humanScore, "Computer:", computerScore);
-
-    if (humanScore > computerScore) {
-        console.log("🎉 You are the overall winner!");
-    } else if (computerScore > humanScore) {
-        console.log("😅 Computer wins the game!");
-    } else {
-        console.log("🤝 It's a tie overall!");
+        return false;
     }
 
 }
-playGame()
+
+function playGame(event) {
+
+    const computerChoice = getComputerChoice().toLowerCase()
+    const humanChoice = event.target.dataset.choice.toLowerCase()
+
+    const result = playRound(computerChoice, humanChoice)
+
+    if (result === true) {
+        humanScore++
+        gameMessage.textContent = `You Win! ${titleCase(humanChoice)} beats ${computerChoice}.`;
+
+    } else if (result === false) {
+        computerScore++
+        gameMessage.textContent = `You Lose! ${titleCase(computerChoice)} beats ${humanChoice}.`;
+    } else {
+        gameMessage.textContent = `It's a Tie! You both chose ${humanChoice}.`;
+
+    }
+
+    humanScoreLabel.textContent = humanScore
+    computerScoreLabel.textContent = computerScore
+    
+    humanHand.textContent = icons[humanChoice]
+    computerHand.textContent = icons[computerChoice]
+
+    if (humanScore === MAX_SCORE) {
+        gameMessage.textContent = "🎉 You are the overall winner!";
+        disableButtons();
+    } else if (computerScore === MAX_SCORE) {
+        gameMessage.textContent = "😅 Computer wins the game!";
+        disableButtons();
+    }
+}
+
+
+buttons.forEach(btn => {
+    btn.addEventListener("click", playGame);
+});
+
+function disableButtons() {
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+}
